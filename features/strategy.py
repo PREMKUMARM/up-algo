@@ -9,7 +9,7 @@ import sys
 # Configure OAuth2 access token for authorization: OAUTH2
 configuration = upstox_client.Configuration()
 
-file1 = open("access_token.txt", "r")
+file1 = open("./config/access_token.txt", "r")
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -19,7 +19,7 @@ stdout_handler = logging.StreamHandler(sys.stdout)
 stdout_handler.setLevel(logging.DEBUG)
 stdout_handler.setFormatter(formatter)
 
-file_handler = logging.FileHandler('logs.log')
+file_handler = logging.FileHandler('./logs/logs.log')
 file_handler.setLevel(logging.DEBUG)
 file_handler.setFormatter(formatter)
 
@@ -27,7 +27,7 @@ file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 #logger.addHandler(stdout_handler)
 token = file1.readline().replace("\n", "")
-logger.info(token)
+#logger.info(token)
 configuration.access_token = token
 file1.close() 
 # create an instance of the API class
