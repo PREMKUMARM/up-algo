@@ -5,13 +5,12 @@ import secrets
 import base64
 import pyotp
 import logging
-import json
 from urllib.parse import urlparse, parse_qs
 
 logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
-os.environ['PYTHONASYNCIODEBUG'] = '1'
+#os.environ['PYTHONASYNCIODEBUG'] = '1'
 
 # Paste your credentials below: 
 API_KEY = "c035fcb0-faf5-4cef-88a6-ed222f93c8ce"
@@ -40,6 +39,7 @@ headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/113.0",
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
     "Accept-Language": "en-US,en;q=0.5",
+    "Accept-Encoding": "gzip, deflate, br",
     "Connection": "keep-alive",
     "Upgrade-Insecure-Requests": "1",
     "Sec-Fetch-Dest": "document",
@@ -50,6 +50,7 @@ headers = {
 
 service_headers = {
     'Accept': '*/*',
+    'Accept-Encoding': 'gzip, deflate, br',
     'Accept-Language': 'en-US,en;q=0.5',
     'Connection': 'keep-alive',
     'Content-Type': 'application/json',
@@ -137,11 +138,6 @@ async def get_code():
                         
                         )
                     if response.status_code == 200:
-                        #logging.info(response.status_code)
-                        logging.info(response)
-                        resp_dict = response.json()
-                        pretty = json.dumps(resp_dict, indent=4)
-                        print(pretty)
                         validateOTPToken = response.json()["data"].get("validateOTPToken", "")
                         logging.info(validateOTPToken)
     
@@ -160,10 +156,7 @@ async def get_code():
                             
                             )
                         if response.status_code == 200:
-                            logging.info(response)
-                            resp_dict = response.json()
-                            pretty = json.dumps(resp_dict, indent=4)
-                            print(pretty)
+                            logging.info(response.text)
                             userprofile = response.json()["data"]["userProfile"]
                             profile_id = userprofile.get("profileId")
                             user_id = userprofile.get("userId")
@@ -238,8 +231,6 @@ async def getAccessToken(code):
     
 if __name__ == "__main__":
     code = asyncio.run(get_code())
+    print(code)
     access_token = asyncio.run(getAccessToken(code))
-    file1 = open("access_token.txt", "w")
-    file1.write(access_token)
-    file1.close()  # to change file access modes
     print(access_token)

@@ -26,8 +26,9 @@ file_handler.setFormatter(formatter)
 
 logger.addHandler(file_handler)
 #logger.addHandler(stdout_handler)
-
-configuration.access_token = file1.readline()
+token = file1.readline().replace("\n", "")
+logger.info(token)
+configuration.access_token = token
 file1.close() 
 # create an instance of the API class
 # create an instance of the API class
